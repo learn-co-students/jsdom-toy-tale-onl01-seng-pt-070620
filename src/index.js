@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // let the challenge begin!
 // fetch toys
-  function fetchToys() {
+  async function fetchToys() {
     return fetch("http://localhost:3000/toys")
       .then(response => response.json())
       // .then(results => addToys(results))
@@ -32,19 +32,19 @@ document.addEventListener("DOMContentLoaded", () => {
       // impotant!!! Never use the Dot Notation when using a Variable
       let toyId = toy["id"]; // or toy.id
       let toyName = toy["name"]; // or toy.name
-      let image = toy["image"]; // or toy.image
-      let likes = toy["likes"]; // or toy.likes
+      let toyImage = toy["image"]; // or toy.image
+      let toyLikes = toy["likes"]; // or toy.likes
 
       let h2 = document.createElement("h2")
-      h2.innerHTML = toyName
+      h2.innerText = toyName
 
       let img = document.createElement("img")
       // .classList.add("toy-avatar"); ---> this causes cannot read prperty for next line; why???
       img.setAttribute('class', "toy-avatar")
-      img.setAttribute('src', image);
+      img.setAttribute('src', toyImage);
 
       let p = document.createElement("p")
-      p.innerText = `${likes} likes`
+      p.innerText = `${toyLikes} likes`
 
       let btn = document.createElement('button')
       // .classList.add("like-btn"); ---> this line causes cannot read property for next line like above; why??
@@ -70,22 +70,22 @@ document.addEventListener("DOMContentLoaded", () => {
       } 
 
 // add new toys
-function addNewToys(toyName, toyUrl) {
-  let toyForm = {
-    toyName = toyName,
-    toyUrl = toyUrl
-  }
+// function addNewToys(toyName, toyUrl) {
+//   let toyForm = {
+//     toyName = toyName,
+//     toyUrl = toyUrl
+//   }
 
-  let toyObject = {
-    method: "POST",
-    headers: {
-      "content-type": "application/json",
-      "Accept": "application/json"
-    },
-    body: JSON.stringify(toyForm)
-  }
-  return fetch("http://localhost:3000/toys", toyObject)
-    .then()
-    .then()
-    .catch(error)
-}
+//   let toyObject = {
+//     method: "POST",
+//     headers: {
+//       "content-type": "application/json",
+//       "Accept": "application/json"
+//     },
+//     body: JSON.stringify(toyForm)
+//   }
+//   return fetch("http://localhost:3000/toys", toyObject)
+//     .then()
+//     .then()
+//     .catch(error)
+// }
