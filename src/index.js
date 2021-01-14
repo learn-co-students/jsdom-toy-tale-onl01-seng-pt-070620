@@ -21,53 +21,53 @@ document.addEventListener("DOMContentLoaded", () => {
       .then(response => response.json())
       // .then(results => addToys(results))
       .then(function(toys) {
-        addToys(toys);
+        renderToys(toys);
       })
   }
 
 // add toy info to the card
-  function addToys(toys) {
+  function renderToys(toys) {
     toys.forEach(function(toy) {
+      // parse each toy data, set variables, manipulate dom, and add event lisenser
+      // impotant!!! Never use the Dot Notation when using a Variable
+      let toyId = toy["id"]; // or toy.id
+      let toyName = toy["name"]; // or toy.name
+      let image = toy["image"]; // or toy.image
+      let likes = toy["likes"]; // or toy.likes
+
+      let h2 = document.createElement("h2")
+      h2.innerHTML = toyName
+
+      let img = document.createElement("img")
+      // .classList.add("toy-avatar"); ---> this causes cannot read prperty for next line; why???
+      img.setAttribute('class', "toy-avatar")
+      img.setAttribute('src', image);
+
+      let p = document.createElement("p")
+      p.innerText = `${likes} likes`
+
+      let btn = document.createElement('button')
+      // .classList.add("like-btn"); ---> this line causes cannot read property for next line like above; why??
+      btn.setAttribute('class', "like-btn")
+      btn.setAttribute('id', toyId)
+      btn.addEventListener('click', (event) => {likeToys})
+      
       // create div with class card -> append to toy collection
-      console.log(toy);
-      let div = document.createElement("div");
-      div.classList.add("card");
-      let toyContainer = document.querySelector("#toy-collection");
-      toyContainer.appendChild(div);
-      // append each toy to div with class card
-      let toyCard = document.querySelector("card");
-      toyCard.textContent = toy;
-      div.appendChild(toyCard)
+      // append each toy attribute to div with class card
+      let divCard = document.createElement('div')
+      divCard.setAttribute('class', 'card')
+      let toyContainer = document.querySelector("#toy-collection")
+      divCard.appendChild(h2, img, p, btn)
+      toyContainer.appendChild(divCard);
     });
   }
 
-      {
-      let toyId = toy["id"];
-      let toyName = toy["name"];
-      let image = toy["image"];
-      let likes = toy["likes"];
-
-      let h2 = document.createElement("h2")
-        h2.innerHTML = toyId
-      let img = document.createElement("img").classList.add("toy-avatar")
-        // continune to add more attributes of the img here...
-        img.src = image["src"]
-      let p = document.createElement("p")
-        p.innerText = likes
-      let btn = document.getElementById("new-toy-btn").classList.add("like-btn")
-        btn.addEventListener("submit", addNewToys())
-
-      let toyCollection = document.getElementById("toy-collection")
-      let toyCard = document.createElement("div")
-      toyCard.classList.add("card")
-      
-      let toyList = document.querySelector("card")
-      toyList.appendChild("h2")
-      toyList.appendChild("img")
-      toyList.appendChild("p")
-      toyList.appendChild("btn")
-    }
-  }
+    // likeToys function to handle like toys button
+      function likeToys(event) {
+        let likeToy = event
+        console.log(e.target.dataset)
+        likes(event)
+      } 
 
 // add new toys
 function addNewToys(toyName, toyUrl) {
