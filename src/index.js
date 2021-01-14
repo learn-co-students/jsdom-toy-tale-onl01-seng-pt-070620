@@ -16,18 +16,36 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // let the challenge begin!
 // fetch toys
-  function fetchToys = {
+  function fetchToys() {
     return fetch("http://localhost:3000/toys")
       .then(response => response.json())
-      .then(results => addToys(toys))
+      // .then(results => addToys(results))
+      .then(function(toys) {
+        addToys(toys);
+      })
   }
+
 // add toy info to the card
   function addToys(toys) {
-    toys.forEach(toy) {
-      let toyId = toy["id"]
-      let toyName = toy["name"]
-      let image = toy["image"]
-      let likes = toy["likes"]
+    toys.forEach(function(toy) {
+      // create div with class card -> append to toy collection
+      console.log(toy);
+      let div = document.createElement("div");
+      div.classList.add("card");
+      let toyContainer = document.querySelector("#toy-collection");
+      toyContainer.appendChild(div);
+      // append each toy to div with class card
+      let toyCard = document.querySelector("card");
+      toyCard.textContent = toy;
+      div.appendChild(toyCard)
+    });
+  }
+
+      {
+      let toyId = toy["id"];
+      let toyName = toy["name"];
+      let image = toy["image"];
+      let likes = toy["likes"];
 
       let h2 = document.createElement("h2")
         h2.innerHTML = toyId
@@ -36,8 +54,8 @@ document.addEventListener("DOMContentLoaded", () => {
         img.src = image["src"]
       let p = document.createElement("p")
         p.innerText = likes
-      let btn = document.createElement("button").classList.add("like-btn")
-        p.innerText = "Like"
+      let btn = document.getElementById("new-toy-btn").classList.add("like-btn")
+        btn.addEventListener("submit", addNewToys())
 
       let toyCollection = document.getElementById("toy-collection")
       let toyCard = document.createElement("div")
