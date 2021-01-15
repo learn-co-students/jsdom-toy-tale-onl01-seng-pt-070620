@@ -58,7 +58,7 @@ document.addEventListener("DOMContentLoaded", () => {
       divCard.setAttribute('class', 'card')
       let toyContainer = document.querySelector("#toy-collection")
       divCard.appendChild(h2, img, p, btn)
-      toyContainer.appendChild(divCard);
+      toyContainer.appendChild(divCard)
     });
   }
 
@@ -69,23 +69,52 @@ document.addEventListener("DOMContentLoaded", () => {
         likes(event)
       } 
 
-// add new toys
-// function addNewToys(toyName, toyUrl) {
-//   let toyForm = {
-//     toyName = toyName,
-//     toyUrl = toyUrl
-//   }
+// create new toys
+  async function createToys(toyName, toyImage) {
+    let toyForm = {
+      name: toyName,
+      image: toyImage
+    }
 
-//   let toyObject = {
-//     method: "POST",
-//     headers: {
-//       "content-type": "application/json",
-//       "Accept": "application/json"
-//     },
-//     body: JSON.stringify(toyForm)
-//   }
-//   return fetch("http://localhost:3000/toys", toyObject)
-//     .then()
-//     .then()
-//     .catch(error)
-// }
+    let toyObject = {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        "Accept": "application/json"
+      },
+      body: JSON.stringify(toyForm)
+    }
+
+    return fetch("http://localhost:3000/toys", toyObject)
+      .then(function(response) {
+        return response.json();
+      })
+      .then(newToyData => renderNewToys(newToyData)
+      )
+      .catch(function(error) {
+        alert("something is not right. trace and debug!");
+        console.log(error.message);
+      });
+
+      function renderNewToys(newToyData) {
+        let toyFormContainer = document.querySelector(".container");
+
+        let h2 = document.createElement("h2")
+        h2.innerHTML = newToyData.name
+
+        let img = document.createElement("img")
+        img.setAttribute('class', "toy-avatar")
+        img.setAttribute('src', newToyData.image)
+
+        let btn = document.createElement('button')
+        btn.setAttribute('class', "like-btn")
+        btn.setAttribute('id', newToyData.id)
+        btn.addEventListener('click', (event) => {event.target.dataset})
+
+        let divCard = document.createElement('div')
+        divCard.setAttribute('class', 'card')
+        divCard.appendChild(h2, img, btn)
+        
+        toyFormContainer.appendChild(divCard)
+      }
+  }
