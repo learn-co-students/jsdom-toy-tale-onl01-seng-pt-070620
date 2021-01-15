@@ -114,7 +114,27 @@ document.addEventListener("DOMContentLoaded", () => {
         let divCard = document.createElement('div')
         divCard.setAttribute('class', 'card')
         divCard.appendChild(h2, img, btn)
-        
+
         toyFormContainer.appendChild(divCard)
       }
   }
+
+  // increase toy's likes
+    async function likesToy() {
+
+      let toyObj = {
+        method: "PATCH",
+        headers: {
+          "content-type": "application/json",
+          "Accept": "application/json"
+        },
+
+        body: JSON:stringify({
+          "likes": `${likes}`
+        })
+      }
+
+      return fetch('http://localhost:3000/toys/:id')
+
+    }
+    
