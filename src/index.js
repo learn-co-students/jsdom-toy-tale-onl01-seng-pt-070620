@@ -5,6 +5,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const toyFormContainer = document.querySelector(".container");
   addBtn.addEventListener("click", () => {
     // hide & seek with the form
+    fetchToys();
     addToy = !addToy;
     if (addToy) {
       toyFormContainer.style.display = "block";
@@ -50,7 +51,7 @@ document.addEventListener("DOMContentLoaded", () => {
       // .classList.add("like-btn"); ---> this line causes cannot read property for next line like above; why??
       btn.setAttribute('class', "like-btn")
       btn.setAttribute('id', toyId)
-      btn.addEventListener('click', (event) => {likeToys})
+      btn.innerHTML = "Like this Toy"
       
       // create div with class card -> append to toy collection
       // append each toy attribute to div with class card
@@ -59,15 +60,33 @@ document.addEventListener("DOMContentLoaded", () => {
       let toyContainer = document.querySelector("#toy-collection")
       divCard.appendChild(h2, img, p, btn)
       toyContainer.appendChild(divCard)
+
+      // add like button to each toy
+      let button = document.querySelector(".like-btn")
+      button.addEventListener('click', likeButton)
     });
   }
 
     // likeToys function to handle like toys button
-      function likeToys(event) {
-        let likeToy = event
-        console.log(e.target.dataset)
-        likes(event)
-      } 
+  const likeButton = (event) => {
+    let id = parseInt(event.target.parentElement.dataset.id)
+
+    let likes = document.querySelector("#p")
+    num = parseInt(p.innerText)
+    num += 1
+    likes.innerText = num
+
+    fetch("http://localhost:3000/toys", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        "Accept": "application/json"
+      },
+      body: JSON.stringify({
+        toyId: id
+      })
+    })
+  }
 
 // create new toys
   async function createToys(toyName, toyImage) {
@@ -109,6 +128,7 @@ document.addEventListener("DOMContentLoaded", () => {
         let btn = document.createElement('button')
         btn.setAttribute('class', "like-btn")
         btn.setAttribute('id', newToyData.id)
+        btn.innerHTML = "Like this Toy"
         btn.addEventListener('click', (event) => {event.target.dataset})
 
         let divCard = document.createElement('div')
@@ -116,11 +136,21 @@ document.addEventListener("DOMContentLoaded", () => {
         divCard.appendChild(h2, img, btn)
 
         toyFormContainer.appendChild(divCard)
+
+        // add like button to each toy
+        let button = document.querySelector(".like-btn")
+        button.addEventListener('click', likeButton)
       }
   }
 
   // increase toy's likes
     async function likesToy() {
+      let likeButton = document.querySelector('like-btn')
+
+      likeButton.addEventListener('clcik', function(event) {
+        event.preventDefault();
+
+      })
 
       let toyObj = {
         method: "PATCH",
@@ -129,12 +159,11 @@ document.addEventListener("DOMContentLoaded", () => {
           "Accept": "application/json"
         },
 
-        body: JSON:stringify({
+        body: JSON.stringify({
           "likes": `${likes}`
         })
       }
 
-      return fetch('http://localhost:3000/toys/:id')
+      return fetch('http://localhost:3000/toys/:id', toyObj)
 
     }
-    
