@@ -1,11 +1,12 @@
 let addToy = false;
+const addBtn = document.querySelector("#new-toy-btn");
+const toyContainer = document.querySelector("#toy-collection")
 
 document.addEventListener("DOMContentLoaded", () => {
   const addBtn = document.querySelector("#new-toy-btn");
   const toyFormContainer = document.querySelector(".container");
   addBtn.addEventListener("click", () => {
     // hide & seek with the form
-    fetchToys();
     addToy = !addToy;
     if (addToy) {
       toyFormContainer.style.display = "block";
@@ -16,19 +17,41 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 // let the challenge begin!
-// fetch toys
+// fetch/get toys
   async function fetchToys() {
     return fetch("http://localhost:3000/toys")
       .then(response => response.json())
-      // .then(results => addToys(results))
       .then(function(toys) {
-        renderToys(toys);
+        toys.forEach(function(toy) {
+          renderToys(toy)
+        })
       })
   }
 
+// display all toys on the page
+// parse user input with form
+function postToy(toys) {
+  fetch('http://localhost:3000/toys', {
+    method: 'POST',
+    headers: {
+      'Content-type': 'application/json',
+      Accept: "application/json"
+    },
+    body: JSON.stringify({
+      "name": toys["name"],
+      "image": toys["image"],
+      "likes": toys["likes"]
+    })
+  })
+  .then(response => response.json())
+  .then(function(newToyObj) {
+    let newToy = renderToys(newToyObj)
+    toyContainer.append(newToy)
+  })
+}
+
 // add toy info to the card
-  function renderToys(toys) {
-    toys.forEach(function(toy) {
+  function renderToys(toy) {
       // parse each toy data, set variables, manipulate dom, and add event lisenser
       // impotant!!! Never use the Dot Notation when using a Variable
       let toyId = toy["id"]; // or toy.id
@@ -52,118 +75,89 @@ document.addEventListener("DOMContentLoaded", () => {
       btn.setAttribute('class', "like-btn")
       btn.setAttribute('id', toyId)
       btn.innerHTML = "Like this Toy"
+      btn.addEventListener('click', (event) => {
+        console.log(event.target.dataset);
+        likesToy(event)
+      })
       
       // create div with class card -> append to toy collection
       // append each toy attribute to div with class card
       let divCard = document.createElement('div')
       divCard.setAttribute('class', 'card')
-      let toyContainer = document.querySelector("#toy-collection")
       divCard.appendChild(h2, img, p, btn)
       toyContainer.appendChild(divCard)
-
-      // add like button to each toy
-      let button = document.querySelector(".like-btn")
-      button.addEventListener('click', likeButton)
-    });
   }
 
     // likeToys function to handle like toys button
-  const likeButton = (event) => {
-    let id = parseInt(event.target.parentElement.dataset.id)
+  function likesToy(event) {
+    event.preventDefault()
+    let moreLikes = parseInt(e.target.previousElementSibling.innerText) + 1
 
-    let likes = document.querySelector("#p")
-    num = parseInt(p.innerText)
-    num += 1
-    likes.innerText = num
-
-    fetch("http://localhost:3000/toys", {
-      method: "POST",
+    fetch(`http://localhost:3000/toys/${e.target.id}`, {
+      method: "PATCH",
       headers: {
         "content-type": "application/json",
         "Accept": "application/json"
       },
       body: JSON.stringify({
-        toyId: id
+        "likes": moreLikes
       })
+    })
+    .then(response => response.json())
+    .then(moreLike_object => {
+      e.target.previousElementSibling.innerText = `${moreLikes} likes`;
     })
   }
 
 // create new toys
-  async function createToys(toyName, toyImage) {
-    let toyForm = {
-      name: toyName,
-      image: toyImage
-    }
+// initial idea. why this is not efficient???
+  // async function createToys(toyName, toyImage) {
+  //   let toyForm = {
+  //     name: toyName,
+  //     image: toyImage
+  //   }
 
-    let toyObject = {
-      method: "POST",
-      headers: {
-        "content-type": "application/json",
-        "Accept": "application/json"
-      },
-      body: JSON.stringify(toyForm)
-    }
+  //   let toyObject = {
+  //     method: "POST",
+  //     headers: {
+  //       "content-type": "application/json",
+  //       "Accept": "application/json"
+  //     },
+  //     body: JSON.stringify(toyForm)
+  //   }
 
-    return fetch("http://localhost:3000/toys", toyObject)
-      .then(function(response) {
-        return response.json();
-      })
-      .then(newToyData => renderNewToys(newToyData)
-      )
-      .catch(function(error) {
-        alert("something is not right. trace and debug!");
-        console.log(error.message);
-      });
+  //   return fetch("http://localhost:3000/toys", toyObject)
+  //     .then(function(response) {
+  //       return response.json();
+  //     })
+  //     .then(newToyData => renderNewToys(newToyData)
+  //     )
+  //     .catch(function(error) {
+  //       alert("something is not right. trace and debug!");
+  //       console.log(error.message);
+  //     });
 
-      function renderNewToys(newToyData) {
-        let toyFormContainer = document.querySelector(".container");
+  //     function renderNewToys(newToyData) {
 
-        let h2 = document.createElement("h2")
-        h2.innerHTML = newToyData.name
+  //       let h2 = document.createElement("h2")
+  //       h2.innerHTML = newToyData.name
 
-        let img = document.createElement("img")
-        img.setAttribute('class', "toy-avatar")
-        img.setAttribute('src', newToyData.image)
+  //       let img = document.createElement("img")
+  //       img.setAttribute('class', "toy-avatar")
+  //       img.setAttribute('src', newToyData.image)
 
-        let btn = document.createElement('button')
-        btn.setAttribute('class', "like-btn")
-        btn.setAttribute('id', newToyData.id)
-        btn.innerHTML = "Like this Toy"
-        btn.addEventListener('click', (event) => {event.target.dataset})
+  //       let btn = document.createElement('button')
+  //       btn.setAttribute('class', "like-btn")
+  //       btn.setAttribute('id', newToyData.id)
+  //       btn.innerHTML = "Like this Toy"
+  //       btn.addEventListener('click', (event) => {
+  //         console.log(event.target.dataset);
+  //         likesToy(event)
+  //       })
 
-        let divCard = document.createElement('div')
-        divCard.setAttribute('class', 'card')
-        divCard.appendChild(h2, img, btn)
-
-        toyFormContainer.appendChild(divCard)
-
-        // add like button to each toy
-        let button = document.querySelector(".like-btn")
-        button.addEventListener('click', likeButton)
-      }
-  }
-
-  // increase toy's likes
-    async function likesToy() {
-      let likeButton = document.querySelector('like-btn')
-
-      likeButton.addEventListener('clcik', function(event) {
-        event.preventDefault();
-
-      })
-
-      let toyObj = {
-        method: "PATCH",
-        headers: {
-          "content-type": "application/json",
-          "Accept": "application/json"
-        },
-
-        body: JSON.stringify({
-          "likes": `${likes}`
-        })
-      }
-
-      return fetch('http://localhost:3000/toys/:id', toyObj)
-
-    }
+  //       let divCard = document.createElement('div')
+  //       divCard.setAttribute('class', 'card')
+  //       divCard.appendChild(h2, img, p, btn)
+  //       toyContainer.appendChild(divCard)
+  //     }
+  // }
