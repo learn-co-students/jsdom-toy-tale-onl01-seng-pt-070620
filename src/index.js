@@ -1,6 +1,7 @@
 let addToy = false;
 const addBtn = document.querySelector("#new-toy-btn");
 const toyContainer = document.querySelector("#toy-collection")
+const toyForm = document.querySelector('.container')
 
 document.addEventListener("DOMContentLoaded", () => {
   const addBtn = document.querySelector("#new-toy-btn");
