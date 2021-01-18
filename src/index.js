@@ -21,12 +21,13 @@ document.addEventListener("DOMContentLoaded", () => {
   async function fetchToys() {
     return fetch("http://localhost:3000/toys")
       .then(response => response.json())
-      .then(function(toys) {
-        toys.forEach(function(toy) {
-          renderToys(toy)
-        })
-      })
   }
+
+  fetchToys().then(toys => {
+    toys.forEach(toy => {
+      renderToys(toy)
+    })
+  })
 
 // display all toys on the page
 // parse user input with form
@@ -38,13 +39,13 @@ function postToy(toys) {
       Accept: "application/json"
     },
     body: JSON.stringify({
-      "name": toys["name"],
-      "image": toys["image"],
-      "likes": toys["likes"]
+      "name": toys.name.value,
+      "image": toys.image.value,
+      "likes": 0
     })
   })
   .then(response => response.json())
-  .then(function(newToyObj) {
+  .then((newToyObj) => {
     let newToy = renderToys(newToyObj)
     toyContainer.append(newToy)
   })
@@ -54,27 +55,27 @@ function postToy(toys) {
   function renderToys(toy) {
       // parse each toy data, set variables, manipulate dom, and add event lisenser
       // impotant!!! Never use the Dot Notation when using a Variable
-      let toyId = toy["id"]; // or toy.id
-      let toyName = toy["name"]; // or toy.name
-      let toyImage = toy["image"]; // or toy.image
-      let toyLikes = toy["likes"]; // or toy.likes
+      // let toyId = toy["id"]; // or toy.id
+      // let toyName = toy["name"]; // or toy.name
+      // let toyImage = toy["image"]; // or toy.image
+      // let toyLikes = toy["likes"]; // or toy.likes
 
       let h2 = document.createElement("h2")
-      h2.innerText = toyName
+      h2.innerText = toy.name
 
       let img = document.createElement("img")
       // .classList.add("toy-avatar"); ---> this causes cannot read prperty for next line; why???
       img.setAttribute('class', "toy-avatar")
-      img.setAttribute('src', toyImage);
+      img.setAttribute('src', toy.image);
 
       let p = document.createElement("p")
-      p.innerText = `${toyLikes} likes`
+      p.innerText = `${toy.likes} likes`
 
       let btn = document.createElement('button')
       // .classList.add("like-btn"); ---> this line causes cannot read property for next line like above; why??
       btn.setAttribute('class', "like-btn")
-      btn.setAttribute('id', toyId)
-      btn.innerHTML = "Like this Toy"
+      btn.setAttribute('id', toy.id)
+      btn.innerHTML = "like"
       btn.addEventListener('click', (event) => {
         console.log(event.target.dataset);
         likesToy(event)
@@ -84,16 +85,16 @@ function postToy(toys) {
       // append each toy attribute to div with class card
       let divCard = document.createElement('div')
       divCard.setAttribute('class', 'card')
-      divCard.appendChild(h2, img, p, btn)
-      toyContainer.appendChild(divCard)
+      divCard.append(h2, img, p, btn)
+      toyContainer.append(divCard)
   }
 
     // likeToys function to handle like toys button
   function likesToy(event) {
     event.preventDefault()
-    let moreLikes = parseInt(e.target.previousElementSibling.innerText) + 1
+    let moreLikes = parseInt(event.target.previousElementSibling.innerText) + 1
 
-    fetch(`http://localhost:3000/toys/${e.target.id}`, {
+    fetch(`http://localhost:3000/toys/${event.target.id}`, {
       method: "PATCH",
       headers: {
         "content-type": "application/json",
@@ -105,7 +106,7 @@ function postToy(toys) {
     })
     .then(response => response.json())
     .then(moreLike_object => {
-      e.target.previousElementSibling.innerText = `${moreLikes} likes`;
+      event.target.previousElementSibling.innerText = `${moreLikes} likes`;
     })
   }
 

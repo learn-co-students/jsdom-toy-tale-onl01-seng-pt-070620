@@ -4,7 +4,7 @@
       "id": 1,
       "name": "Woody",
       "image": "http://www.pngmart.com/files/3/Toy-Story-Woody-PNG-Photos.png",
-      "likes": 10
+      "likes": 15
     },
     {
       "id": 2,
@@ -101,14 +101,21 @@
     {
       "name": "resident_evil!!!",
       "image": "\"https://www.residentevil.com/_asset/images/resistance-panel.jpg\"",
-      "likes": 19,
+      "likes": 39,
       "id": 18
     },
     {
-      "id": 19
+      "id": 19,
+      "likes": null
     },
     {
       "id": 20
+    },
+    {
+      "name": "Ebo",
+      "image": "111",
+      "likes": 15,
+      "id": 21
     }
   ]
 }
