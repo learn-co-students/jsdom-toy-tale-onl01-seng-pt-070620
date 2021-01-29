@@ -15,8 +15,16 @@ document.addEventListener("DOMContentLoaded", () => {
         <button class="like-btn">Like <3</button>
       </div>`
       })
-      document.querySelector("#toy-collection").innerHTML = toysHTML
+      document.querySelector("#toy-collection").innerHTML = toysHTML.join('')
   })
+
+  toyFormContainer.addEventListener('submit', function(e){
+    e.preventDefault()
+    const toyName = e.target.name.value
+    const toyImage = e.target.image.value
+ 
+   
+  });
  
   addBtn.addEventListener("click", () => {
     // hide & seek with the form
