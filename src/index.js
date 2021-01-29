@@ -23,6 +23,20 @@ document.addEventListener("DOMContentLoaded", () => {
     const toyName = e.target.name.value
     const toyImage = e.target.image.value
  
+    fetch("http://localhost:3000/toys", {
+      method: "POST"
+      headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json"
+      },
+      body: JSON.stringify({
+        name: toyName,
+        image: toyImage,
+        likes: 99
+      })
+    })
+    .then(r => r.json())
+    .then(newToy => console.log(newToy))
    
   });
  
