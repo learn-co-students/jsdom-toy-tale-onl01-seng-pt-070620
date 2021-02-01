@@ -15,16 +15,17 @@ document.addEventListener("DOMContentLoaded", () => {
         <button class="like-btn">Like <3</button>
       </div>`
       })
-      document.querySelector("#toy-collection").innerHTML = toysHTML.join('')
-  })
+      document.querySelector("#toy-collection").innerHTML = toysHTML.join('');
+  });
 
   toyFormContainer.addEventListener('submit', function(e){
-    e.preventDefault()
+    e.preventDefault();
     const toyName = e.target.name.value
     const toyImage = e.target.image.value
- 
-    fetch("http://localhost:3000/toys", {
-      method: "POST"
+
+
+  fetch("http://localhost:3000/toys", {
+      method: "POST",
       headers: {
         "Content-Type": "application/json",
         "Accept": "application/json"
@@ -37,7 +38,7 @@ document.addEventListener("DOMContentLoaded", () => {
     })
     .then(r => r.json())
     .then(newToy => console.log(newToy))
-   
+
   });
  
   addBtn.addEventListener("click", () => {
