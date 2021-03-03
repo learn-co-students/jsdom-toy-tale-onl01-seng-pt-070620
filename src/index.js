@@ -1,8 +1,11 @@
 let addToy = false;
-const addBtn = document.querySelector("#new-toy-btn");
-const toyFormContainer = document.querySelector(".container");
+
 
 document.addEventListener("DOMContentLoaded", () => {
+const addBtn = document.querySelector("#new-toy-btn");
+const toyFormContainer = document.querySelector(".container");
+const toyCollection = document.getElementById('toy-collection');
+
   fetch("http://localhost:3000/toys")
     .then(r => r.json())
     .then(toys => {
@@ -12,10 +15,10 @@ document.addEventListener("DOMContentLoaded", () => {
         <h2>${toy.name}</h2>
         <img src=${toy.image} class="toy-avatar" />
         <p>${toy.likes} Likes </p>
-        <button class="like-btn">Like <3</button>
+        <button data-id="${toy.id}" class="like-btn">Like <3</button>
       </div>`
       })
-      document.querySelector("#toy-collection").innerHTML = toysHTML.join('');
+      toyCollection.innerHTML = toysHTML.join('');
   });
 
   toyFormContainer.addEventListener('submit', function(e){
@@ -33,14 +36,29 @@ document.addEventListener("DOMContentLoaded", () => {
       body: JSON.stringify({
         name: toyName,
         image: toyImage,
-        likes: 99
+        likes: 0
       })
     })
     .then(r => r.json())
-    .then(newToy => console.log(newToy))
-
+    .then(newToy => {
+      let newToyHTML = 
+      `<div class="card">
+        <h2>${toy.name}</h2>
+        <img src=${toy.image} class="toy-avatar" />
+        <p>${toy.likes} Likes </p>
+        <button data-id="${newToy.id}" class="like-btn">Like <3</button>
+      </div>`
+      toyCollection.innerHTML +=newToyHTML
+    })
+  
   });
- 
+
+  toyCollection.addEventListener('click', (e)=> {
+    console.log(e.target)
+  })
+
+    
+
   addBtn.addEventListener("click", () => {
     // hide & seek with the form
     addToy = !addToy;
